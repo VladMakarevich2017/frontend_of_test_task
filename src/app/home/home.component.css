@@ -1,0 +1,59 @@
+﻿.note-remove-icon, .note button {
+  display: inline-block;
+}
+
+button {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.types {
+  width: 50%;
+}
+
+.notes {
+  width: 50%;
+}
+
+.notes-block, .note-type {
+  width: 100%;
+}
+
+.list-group-item {
+  width: 100%;
+  border-radius: 0;
+}
+
+.notes .list-group-item {
+  width: 70%;
+  padding: 5px;
+}
+
+.icon {
+  display: inline-block;
+  height: 25px;
+  width: 25px;
+}
+
+.add-note-icon {
+  background:url(plus.svg) no-repeat top left;
+}
+
+.save-icon {
+  background:url(save.svg) no-repeat top left;
+}
+
+h3 {
+  text-align: center;
+}
+
+.remove {
+  display: inline-block;
+}
+
+.remove-btn {
+  padding: 5px 8px 5px 8px;
+}
+
+

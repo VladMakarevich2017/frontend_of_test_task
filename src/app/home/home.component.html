@@ -1,0 +1,42 @@
+﻿<!-- <ngx-wig [content]="text1"></ngx-wig> -->
+<div class="container-fluid p-0">
+  <div class="row">
+    <div class="col-2 pr-0">
+      <input class="form-control-lg mb-2" value="{{notesHeader}}" type="text" #nameInputField>
+      <div class="btn-group" role="group" aria-label="Basic example">
+        <button (click)="addNote()" type="button" class="btn btn-default ml-2">
+          <span class="icon add-note-icon" aria-hidden="true"></span>
+        </button>
+        <button (click)="saveNote()" type="button" class="btn btn-default ml-1">
+          <span class="icon save-icon" aria-hidden="true"></span>
+        </button>
+      </div>
+      <div class="row notes-block">
+        <div class="col- types">
+          <div *ngFor="let noteSection of notesSections" class="note-type">
+            <button [ngClass]="{'active': noteSection == selectedSection}" (click)="selectNoteSection(noteSection)" type="button" class="list-group-item">
+              {{noteSection.name}}
+            </button>
+          </div>
+        </div>
+        <div class="col- notes">
+          <div *ngIf="selectedSection && selectedSection.notes" class="list-group">
+            <div class="note" *ngFor="let note of selectedSection.notes" >
+              <button [ngClass]="{'active': note == selectedNote}" (click)="selectNote(note)" type="button" class="list-group-item">
+                {{note.name}}
+              </button>
+              <div class="remove">
+                <button (click)="removeNote(note)" class="btn remove-btn"><i class="fa fa-close"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-10 pl-0 note-body" id="noteBody">
+      <div [froalaEditor]="options" [(froalaModel)]="editorContent"></div>
+    </div>
+  </div>
+</div>
+
+
