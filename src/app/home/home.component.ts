@@ -8,6 +8,8 @@ import {NotesSection} from '../_models/notesSection';
   styleUrls: ['home.component.css'],
 })
 export class HomeComponent implements AfterContentInit {
+
+  constructor(private noteService: NoteService) {}
   @ViewChild('nameInputField') nameInputField: ElementRef;
   notes: Note[] = [];
   editorContent: string;
@@ -17,8 +19,6 @@ export class HomeComponent implements AfterContentInit {
   typesOfNotes: string[];
   notesHeader = 'My notes';
   removeFlag = false;
-
-  constructor(private noteService: NoteService) {}
 
   ngAfterContentInit() {
     this.setMyNotes();
@@ -45,11 +45,20 @@ export class HomeComponent implements AfterContentInit {
   selectNote(note: Note) {
     this.selectedNote = note;
     this.editorContent = note.note;
+    if (note.notesInside) {
+      note.notesInside.forEach(tempNote => {
+        const additionalNote = '<hr>' + 'Name:' + tempNote.name + ';Type:' + tempNote.type.toLowerCase() + '<br>' + tempNote.note + '<hr>';
+        this.editorContent = this.editorContent ? this.editorContent + additionalNote : additionalNote;
+      });
+    }
     this.notesHeader = note.name;
   }
 
   saveNote() {
     this.selectedNote.note = this.editorContent;
+    this.selectedNote.notesInside.forEach(tempNote => {
+      this.selectedNote.note = this.selectedNote.note.replace(/<hr>.*<hr>/, '');
+    });
     this.selectedNote.name = this.nameInputField.nativeElement.value;
     this.noteService.updateNote(this.selectedNote).subscribe(note => this.selectedNote = JSON.parse(JSON.stringify(note)));
   }
@@ -81,8 +90,12 @@ export class HomeComponent implements AfterContentInit {
   }
 
   addIntoCurrentNote(note: Note) {
-    const additionalNote = '<hr>' + 'Name:' + note.name + ';Type:' + note.type.toLowerCase() + '<br>' + note.note + '<hr><br>';
-    this.editorContent = this.editorContent ? this.editorContent + additionalNote : additionalNote;
+    this.noteService.addNoteInside(this.selectedNote, note).subscribe(response => {
+      this.selectedNote.notesInside.push(note);
+      const additionalNote = '<hr>' + 'Name:' + note.name + ';Type:' + note.type.toLowerCase() + '<br>' + note.note + '<hr><br>';
+      this.editorContent = this.editorContent ? this.editorContent + additionalNote : additionalNote;
+      this.selectedNote.note = this.editorContent;
+    });
   }
 
 }

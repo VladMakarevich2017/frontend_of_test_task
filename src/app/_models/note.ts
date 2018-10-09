@@ -5,4 +5,5 @@ export class Note {
   name: string;
   note: string;
   type: string;
+  notesInside: Note[] = [];
 }

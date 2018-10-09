@@ -29,4 +29,8 @@ export class NoteService {
       return this.http.get<string[]>(`${environment.apiUrl}/notes/types`);
     }
 
+    addNoteInside(note: Note, additionalNote: Note) {
+      return this.http.post(`${environment.apiUrl}/notes/additional`, {note, additionalNote});
+    }
+
 }

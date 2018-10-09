@@ -28,7 +28,7 @@
               <div class="remove">
                 <button (click)="removeNote(note)" class="btn remove-btn"><i class="fa fa-close"></i></button>
               </div>
-              <div class="remove">
+              <div *ngIf="selectedNote != note" class="remove">
                 <button (click)="addIntoCurrentNote(note)">+</button>
               </div>
             </div>
@@ -41,5 +41,3 @@
     </div>
   </div>
 </div>
-
-
