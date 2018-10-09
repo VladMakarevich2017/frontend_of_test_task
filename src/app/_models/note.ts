@@ -5,5 +5,4 @@ export class Note {
   name: string;
   note: string;
   type: string;
-  user: User;
 }

@@ -11,7 +11,7 @@
           <span class="icon save-icon" aria-hidden="true"></span>
         </button>
       </div>
-      <div class="row notes-block">
+      <div class="row notes-block mt-1">
         <div class="col- types">
           <div *ngFor="let noteSection of notesSections" class="note-type">
             <button [ngClass]="{'active': noteSection == selectedSection}" (click)="selectNoteSection(noteSection)" type="button" class="list-group-item">
@@ -28,13 +28,16 @@
               <div class="remove">
                 <button (click)="removeNote(note)" class="btn remove-btn"><i class="fa fa-close"></i></button>
               </div>
+              <div class="remove">
+                <button (click)="addIntoCurrentNote(note)">+</button>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="col-10 pl-0 note-body" id="noteBody">
-      <div [froalaEditor]="options" [(froalaModel)]="editorContent"></div>
+    <div class="col-10 pl-0 note-body">
+      <div [froalaEditor] [(froalaModel)]="editorContent"></div>
     </div>
   </div>
 </div>

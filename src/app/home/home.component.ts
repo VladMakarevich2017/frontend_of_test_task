@@ -22,7 +22,6 @@ export class HomeComponent implements AfterContentInit {
 
   ngAfterContentInit() {
     this.setMyNotes();
-    this.setTypesOfNotes();
   }
 
   setTypesOfNotes() {
@@ -35,7 +34,7 @@ export class HomeComponent implements AfterContentInit {
   setMyNotes() {
     this.noteService.getMyNotes().subscribe(notes => {
       this.notes = JSON.parse(JSON.stringify(notes));
-      //alert(JSON.stringify(notes));
+      this.setTypesOfNotes();
     });
   }
 
@@ -79,6 +78,11 @@ export class HomeComponent implements AfterContentInit {
 
   selectNoteSection(noteSection: NotesSection) {
     this.selectedSection = noteSection;
+  }
+
+  addIntoCurrentNote(note: Note) {
+    const additionalNote = '<hr>' + 'Name:' + note.name + ';Type:' + note.type.toLowerCase() + '<br>' + note.note + '<hr><br>';
+    this.editorContent = this.editorContent ? this.editorContent + additionalNote : additionalNote;
   }
 
 }
