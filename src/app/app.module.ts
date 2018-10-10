@@ -1,6 +1,6 @@
 ﻿import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { ReactiveFormsModule } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { routing } from './app.routing';
@@ -12,6 +12,8 @@ import {NgxWigModule} from 'ngx-wig';
 import {FroalaEditorModule, FroalaViewModule} from 'angular-froala-wysiwyg';
 import {InputEditorModule} from 'angular-inline-editors';
 import {SafeHtmlPipe} from './_services/SafeHtmlPipe';
+import {NgxSmartModalModule} from 'ngx-smart-modal';
+import {NgMultiSelectDropDownModule} from 'ng-multiselect-dropdown';
 
 @NgModule({
     imports: [
@@ -20,9 +22,12 @@ import {SafeHtmlPipe} from './_services/SafeHtmlPipe';
       HttpClientModule,
       routing,
       NgxWigModule,
+      FormsModule,
       FroalaEditorModule.forRoot(),
       FroalaViewModule.forRoot(),
       InputEditorModule.forRoot(),
+      NgxSmartModalModule.forRoot(),
+      NgMultiSelectDropDownModule.forRoot()
     ],
     declarations: [
         AppComponent,

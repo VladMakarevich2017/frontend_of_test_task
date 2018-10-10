@@ -3,4 +3,5 @@
 export class NotesSection {
   name: string;
   notes: Note[];
+  selectedItems = [];
 }

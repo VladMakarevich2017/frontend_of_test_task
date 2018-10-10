@@ -2,6 +2,7 @@
 import {Note} from '../_models/note';
 import {NoteService} from '../_services/note.service';
 import {NotesSection} from '../_models/notesSection';
+import {NgxSmartModalService} from 'ngx-smart-modal';
 
 @Component({
   templateUrl: 'home.component.html',
@@ -9,7 +10,8 @@ import {NotesSection} from '../_models/notesSection';
 })
 export class HomeComponent implements AfterContentInit {
 
-  constructor(private noteService: NoteService) {}
+  constructor(private noteService: NoteService,
+              public ngxSmartModalService: NgxSmartModalService) {}
 
   @ViewChild('nameInputField') nameInputField: ElementRef;
   notes: Note[] = [];
@@ -20,9 +22,20 @@ export class HomeComponent implements AfterContentInit {
   typesOfNotes: string[];
   notesHeader = 'My notes';
   removeFlag = false;
+  dropdownSettings = {};
+  selectedItems = [];
 
   ngAfterContentInit() {
     this.setMyNotes();
+    this.dropdownSettings = {
+      singleSelection: false,
+      idField: 'id',
+      textField: 'name',
+      selectAllText: 'Select All',
+      unSelectAllText: 'UnSelect All',
+      itemsShowLimit: 4,
+      allowSearchFilter: true
+    };
   }
 
   setTypesOfNotes() {
@@ -40,7 +53,9 @@ export class HomeComponent implements AfterContentInit {
   }
 
   addNote() {
-    this.noteService.addNote(this.selectedSection.name).subscribe(note => this.selectedSection.notes.push(JSON.parse(JSON.stringify(note))));
+    this.noteService.addNote(this.selectedSection.name).subscribe(note => {
+      this.selectedSection.notes.push(JSON.parse(JSON.stringify(note)));
+    });
   }
 
   selectNote(note: Note) {
@@ -83,7 +98,7 @@ export class HomeComponent implements AfterContentInit {
   spliceNotesIntoSections() {
     this.typesOfNotes.forEach(type => {
       this.notesSections.push({'name' : type, 'notes' : this.notes
-          .filter(note => note.type.toLowerCase() === type.toLowerCase())});
+          .filter(note => note.type.toLowerCase() === type.toLowerCase()), selectedItems: null});
     });
   }
 
@@ -91,16 +106,24 @@ export class HomeComponent implements AfterContentInit {
     this.selectedSection = noteSection;
   }
 
-  addIntoCurrentNote(note: Note) {
-    this.noteService.addNoteInside(this.selectedNote, note).subscribe(response => {
-      if (response != null) {
-        this.selectedNote.notesInside.push(note);
+  addIntoCurrentNote() {
+    console.log(this.notesSections);
+    this.notesSections.forEach(section => {
+      if (section.selectedItems) {
+        section.selectedItems.forEach(item => {
+          this.noteService.addNoteInside(this.selectedNote, item.id).subscribe(response => {
+            if (response != null) {
+              this.selectedNote.notesInside.push(JSON.parse(JSON.stringify(response)));
+            }
+          });
+        });
       }
+      section.selectedItems = [];
     });
   }
 
   removeInsideNote(insideNote: Note) {
-    this.noteService.removeInsideNote(this.selectedNote, insideNote).subscribe(response => {
+    this.noteService.removeInsideNote(this.selectedNote, insideNote.id).subscribe(response => {
       if (response === true) {
         const index = this.selectedNote.notesInside.indexOf(insideNote);
         this.selectedNote.notesInside.splice(index, 1);
@@ -113,6 +136,14 @@ export class HomeComponent implements AfterContentInit {
       return true;
     }
     return false;
+  }
+
+  openModal() {
+    if (this.selectedNote) {
+      this.ngxSmartModalService.getModal('myModal').open();
+    } else {
+      alert('Select a note please');
+    }
   }
 
 }
