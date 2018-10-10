@@ -10,6 +10,7 @@ import {NotesSection} from '../_models/notesSection';
 export class HomeComponent implements AfterContentInit {
 
   constructor(private noteService: NoteService) {}
+
   @ViewChild('nameInputField') nameInputField: ElementRef;
   notes: Note[] = [];
   editorContent: string;
@@ -53,7 +54,15 @@ export class HomeComponent implements AfterContentInit {
   saveNote() {
     this.selectedNote.note = this.editorContent;
     this.selectedNote.name = this.nameInputField.nativeElement.value;
-    this.noteService.updateNote(this.selectedNote).subscribe(note => this.selectedNote = JSON.parse(JSON.stringify(note)));
+    this.noteService.updateNote(this.selectedNote).subscribe(note => {
+      this.selectedNote = JSON.parse(JSON.stringify(note));
+    });
+    this.selectedSection.notes.forEach(obj => {
+      if (obj.id === this.selectedNote.id) {
+        obj.name = this.selectedNote.name;
+        obj.note = this.selectedNote.note;
+      }
+    });
   }
 
   removeNote(note: Note) {
@@ -64,7 +73,7 @@ export class HomeComponent implements AfterContentInit {
   }
 
   changeFieldsBySelectedNote(note: Note) {
-    if (this.selectedNote === note) {
+    if (this.selectedNote.id === note.id) {
       this.selectedNote = null;
       this.editorContent = '';
       this.notesHeader = 'My notes';
