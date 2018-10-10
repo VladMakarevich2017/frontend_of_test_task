@@ -13,6 +13,10 @@ export class NoteService {
       return this.http.get<Note[]>(`${environment.apiUrl}/notes/my`);
     }
 
+    getNote(id: number) {
+      return this.http.get<Note>(`${environment.apiUrl}/notes/` + id);
+    }
+
     addNote(noteType: string) {
       return this.http.post<Note>(`${environment.apiUrl}/notes/add`, noteType);
     }
@@ -31,6 +35,10 @@ export class NoteService {
 
     addNoteInside(note: Note, additionalNote: Note) {
       return this.http.post(`${environment.apiUrl}/notes/additional`, {note, additionalNote});
+    }
+
+    removeInsideNote(note: Note, additionalNote: Note) {
+      return this.http.post(`${environment.apiUrl}/notes/delete/inside`, {note, additionalNote});
     }
 
 }

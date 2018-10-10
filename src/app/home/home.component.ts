@@ -43,22 +43,15 @@ export class HomeComponent implements AfterContentInit {
   }
 
   selectNote(note: Note) {
-    this.selectedNote = note;
-    this.editorContent = note.note;
-    if (note.notesInside) {
-      note.notesInside.forEach(tempNote => {
-        const additionalNote = '<hr>' + 'Name:' + tempNote.name + ';Type:' + tempNote.type.toLowerCase() + '<br>' + tempNote.note + '<hr>';
-        this.editorContent = this.editorContent ? this.editorContent + additionalNote : additionalNote;
-      });
-    }
-    this.notesHeader = note.name;
+    this.noteService.getNote(note.id).subscribe(response => {
+      this.selectedNote = JSON.parse(JSON.stringify(response));
+      this.editorContent = this.selectedNote.note;
+      this.notesHeader = this.selectedNote.name;
+    });
   }
 
   saveNote() {
     this.selectedNote.note = this.editorContent;
-    this.selectedNote.notesInside.forEach(tempNote => {
-      this.selectedNote.note = this.selectedNote.note.replace(/<hr>.*<hr>/, '');
-    });
     this.selectedNote.name = this.nameInputField.nativeElement.value;
     this.noteService.updateNote(this.selectedNote).subscribe(note => this.selectedNote = JSON.parse(JSON.stringify(note)));
   }
@@ -91,11 +84,26 @@ export class HomeComponent implements AfterContentInit {
 
   addIntoCurrentNote(note: Note) {
     this.noteService.addNoteInside(this.selectedNote, note).subscribe(response => {
-      this.selectedNote.notesInside.push(note);
-      const additionalNote = '<hr>' + 'Name:' + note.name + ';Type:' + note.type.toLowerCase() + '<br>' + note.note + '<hr><br>';
-      this.editorContent = this.editorContent ? this.editorContent + additionalNote : additionalNote;
-      this.selectedNote.note = this.editorContent;
+      if (response != null) {
+        this.selectedNote.notesInside.push(note);
+      }
     });
+  }
+
+  removeInsideNote(insideNote: Note) {
+    this.noteService.removeInsideNote(this.selectedNote, insideNote).subscribe(response => {
+      if (response === true) {
+        const index = this.selectedNote.notesInside.indexOf(insideNote);
+        this.selectedNote.notesInside.splice(index, 1);
+      }
+    });
+  }
+
+  compareSelectedNoteWithCurrentNote(note: Note) {
+    if (note && this.selectedNote && note.id === this.selectedNote.id) {
+      return true;
+    }
+    return false;
   }
 
 }

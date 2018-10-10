@@ -11,6 +11,7 @@ import {RegistrationComponent} from './registration/registration.component';
 import {NgxWigModule} from 'ngx-wig';
 import {FroalaEditorModule, FroalaViewModule} from 'angular-froala-wysiwyg';
 import {InputEditorModule} from 'angular-inline-editors';
+import {SafeHtmlPipe} from './_services/SafeHtmlPipe';
 
 @NgModule({
     imports: [
@@ -27,7 +28,8 @@ import {InputEditorModule} from 'angular-inline-editors';
         AppComponent,
         HomeComponent,
         LoginComponent,
-        RegistrationComponent
+        RegistrationComponent,
+        SafeHtmlPipe
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

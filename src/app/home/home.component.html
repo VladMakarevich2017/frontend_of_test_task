@@ -22,13 +22,13 @@
         <div class="col- notes">
           <div *ngIf="selectedSection && selectedSection.notes" class="list-group">
             <div class="note" *ngFor="let note of selectedSection.notes" >
-              <button [ngClass]="{'active': note == selectedNote}" (click)="selectNote(note)" type="button" class="list-group-item">
+              <button [ngClass]="{'active': compareSelectedNoteWithCurrentNote(note)}" (click)="selectNote(note)" type="button" class="list-group-item">
                 {{note.name}}
               </button>
               <div class="remove">
                 <button (click)="removeNote(note)" class="btn remove-btn"><i class="fa fa-close"></i></button>
               </div>
-              <div *ngIf="selectedNote != note" class="remove">
+              <div *ngIf="!compareSelectedNoteWithCurrentNote(note)" class="remove">
                 <button (click)="addIntoCurrentNote(note)">+</button>
               </div>
             </div>
@@ -38,6 +38,16 @@
     </div>
     <div class="col-10 pl-0 note-body">
       <div [froalaEditor] [(froalaModel)]="editorContent"></div>
+      <div *ngIf="selectedNote && selectedNote.notesInside" class="w-50 mt-3 ml-3">
+        <div *ngFor="let insideNote of selectedNote.notesInside" class="card insideNote mb-2">
+          <div class="card-body">
+            <h5 class="card-title">{{insideNote.name}}</h5>
+            <p [innerHTML]="insideNote.note | safeHtml" class="card-text"></p>
+            <p class="card-text"><small class="text-muted">{{insideNote.type.toLowerCase()}}</small></p>
+            <button (click)="removeInsideNote(insideNote)" class="btn remove-inside-button"><i class="fa fa-close"></i></button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
