@@ -14,6 +14,8 @@ import {InputEditorModule} from 'angular-inline-editors';
 import {SafeHtmlPipe} from './_services/SafeHtmlPipe';
 import {NgxSmartModalModule} from 'ngx-smart-modal';
 import {NgMultiSelectDropDownModule} from 'ng-multiselect-dropdown';
+import {TreeviewModule} from 'ngx-treeview';
+import {TreeModule} from 'angular-tree-component';
 
 @NgModule({
     imports: [
@@ -27,7 +29,9 @@ import {NgMultiSelectDropDownModule} from 'ng-multiselect-dropdown';
       FroalaViewModule.forRoot(),
       InputEditorModule.forRoot(),
       NgxSmartModalModule.forRoot(),
-      NgMultiSelectDropDownModule.forRoot()
+      NgMultiSelectDropDownModule.forRoot(),
+      TreeviewModule.forRoot(),
+      TreeModule.forRoot()
     ],
     declarations: [
         AppComponent,

@@ -44,6 +44,10 @@ button {
   background:url(save.svg) no-repeat top left;
 }
 
+.add-inside-note-icon {
+  background:url(more.svg) no-repeat top left;
+}
+
 h3 {
   text-align: center;
 }
@@ -68,6 +72,45 @@ h3 {
 
 .notes-section {
   min-width: 200px;
+}
+
+.fr-emoticon.fr-deletable.fr-emoticon-img {
+  display: block;
+}
+
+.btn-default {
+  border-radius: 5px;
+}
+
+.save-button {
+  position: relative;
+  color: #FFFFFF;
+  text-align: center;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+  text-decoration: none;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.save-button:after {
+  content: "";
+  background: rgb(44, 220, 239);
+  display: block;
+  position: absolute;
+  padding-top: 300%;
+  padding-left: 350%;
+  margin-left: -20px!important;
+  margin-top: -120%;
+  opacity: 0;
+  transition: all 0.8s
+}
+
+.save-button:active:after {
+  padding: 0;
+  margin: 0;
+  opacity: 1;
+  transition: 0s
 }
 
 

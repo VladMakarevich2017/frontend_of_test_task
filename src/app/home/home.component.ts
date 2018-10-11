@@ -3,6 +3,8 @@ import {Note} from '../_models/note';
 import {NoteService} from '../_services/note.service';
 import {NotesSection} from '../_models/notesSection';
 import {NgxSmartModalService} from 'ngx-smart-modal';
+import {TreeviewConfig, TreeviewItem} from 'ngx-treeview';
+import {ITreeOptions} from 'angular-tree-component';
 
 @Component({
   templateUrl: 'home.component.html',
@@ -14,6 +16,7 @@ export class HomeComponent implements AfterContentInit {
               public ngxSmartModalService: NgxSmartModalService) {}
 
   @ViewChild('nameInputField') nameInputField: ElementRef;
+  @ViewChild('typeInputField') typeInputField: ElementRef;
   notes: Note[] = [];
   editorContent: string;
   selectedNote: Note;
@@ -55,6 +58,7 @@ export class HomeComponent implements AfterContentInit {
   addNote() {
     this.noteService.addNote(this.selectedSection.name).subscribe(note => {
       this.selectedSection.notes.push(JSON.parse(JSON.stringify(note)));
+      this.notes.push(JSON.parse(JSON.stringify(note)));
     });
   }
 
@@ -82,13 +86,15 @@ export class HomeComponent implements AfterContentInit {
 
   removeNote(note: Note) {
     this.noteService.removeNote(note).subscribe(response => this.removeFlag = JSON.parse(JSON.stringify(response)));
-    const index = this.selectedSection.notes.indexOf(note);
+    let index = this.selectedSection.notes.indexOf(note);
     this.changeFieldsBySelectedNote(note);
     this.selectedSection.notes.splice(index, 1);
+    index = this.notes.indexOf(note);
+    this.notes.splice(index, 1);
   }
 
   changeFieldsBySelectedNote(note: Note) {
-    if (this.selectedNote.id === note.id) {
+    if (this.selectedNote && this.selectedNote.id === note.id) {
       this.selectedNote = null;
       this.editorContent = '';
       this.notesHeader = 'My notes';
@@ -107,7 +113,6 @@ export class HomeComponent implements AfterContentInit {
   }
 
   addIntoCurrentNote() {
-    console.log(this.notesSections);
     this.notesSections.forEach(section => {
       if (section.selectedItems) {
         section.selectedItems.forEach(item => {
@@ -146,4 +151,35 @@ export class HomeComponent implements AfterContentInit {
     }
   }
 
+  getNotesFromNoteSection(noteSection: NotesSection) {
+    if (this.selectedNote) {
+      return noteSection.notes.filter(note => note.id !== this.selectedNote.id && !this.isInclude(note));
+    }
+    return noteSection.notes;
+  }
+
+  isInclude(tempNote: Note) {
+    let flag = false;
+    this.selectedNote.notesInside.forEach(note => {
+      if (note.id === tempNote.id) {
+        flag = true;
+      }
+    });
+    return flag;
+  }
+
+  addType() {
+    this.noteService.addNoteType(this.typeInputField.nativeElement.value).subscribe(response => {
+      if (response) {
+        this.notesSections.push({notes: [], selectedItems: [], name: response});
+      } else {
+        alert(this.typeInputField.nativeElement.value + ' is exists');
+        this.typeInputField.nativeElement.value = '';
+        this.ngxSmartModalService.getModal('typeModal').close();
+      }
+    });
+  }
+
 }
+
+

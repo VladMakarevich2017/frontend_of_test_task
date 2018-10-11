@@ -21,6 +21,10 @@ export class NoteService {
       return this.http.post<Note>(`${environment.apiUrl}/notes/add`, noteType);
     }
 
+    addNoteType(type: string) {
+      return this.http.post<string>(`${environment.apiUrl}/notes/addtype`, type);
+    }
+
     removeNote(note: Note) {
       return this.http.post(`${environment.apiUrl}/notes/delete`, note.id);
     }
@@ -30,7 +34,7 @@ export class NoteService {
     }
 
     getTypesOfNotes() {
-      return this.http.get<string[]>(`${environment.apiUrl}/notes/types`);
+      return this.http.get<string[]>(`${environment.apiUrl}/notes/mytypes`);
     }
 
     addNoteInside(note: Note, additionalNoteId: number) {

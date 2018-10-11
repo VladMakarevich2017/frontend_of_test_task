@@ -2,16 +2,16 @@
 <div class="container-fluid p-0">
   <div class="row">
     <div class="col-2 pr-0 notes-section">
-      <input class="form-control-lg mb-2" value="{{notesHeader}}" type="text" #nameInputField>
+      <input class="form-control-lg mb-2" value="{{notesHeader}}" type="text" #nameInputField [attr.disabled]="!selectedNote ? '' : null"/>
       <div class="btn-group" role="group" aria-label="Basic example">
-        <button (click)="addNote()" type="button" class="btn btn-default ml-2">
+        <button (click)="addNote()" type="button" class="btn btn-default ml-2" [disabled]="selectedSection == null">
           <span class="icon add-note-icon" aria-hidden="true"></span>
         </button>
-        <button (click)="saveNote()" type="button" class="btn btn-default ml-1">
+        <button (click)="saveNote()" type="button" class="btn btn-default ml-1 save-button" [disabled]="selectedNote == null">
           <span class="icon save-icon" aria-hidden="true"></span>
         </button>
-        <button (click)="openModal()" type="button" class="btn btn-default ml-5">
-          <span class="icon add-note-icon" aria-hidden="true"></span>
+        <button (click)="openModal()" type="button" class="btn btn-default ml-1" [disabled]="selectedNote == null">
+          <span class="icon add-inside-note-icon" aria-hidden="true"></span>
         </button>
       </div>
       <div class="row notes-block mt-1">
@@ -21,6 +21,7 @@
               {{noteSection.name}}
             </button>
           </div>
+          <button (click)="ngxSmartModalService.getModal('typeModal').open()" class="ml-4 mt-1 btn btn-default">Add type</button>
         </div>
         <div class="col- notes">
           <div *ngIf="selectedSection && selectedSection.notes" class="list-group">
@@ -57,7 +58,7 @@
   <div *ngFor="let noteSection of notesSections" class="mb-2">
     <ng-multiselect-dropdown
       [placeholder]="noteSection.name"
-      [data]="noteSection.notes"
+      [data]="getNotesFromNoteSection(noteSection)"
       [settings]="dropdownSettings"
       [(ngModel)]="noteSection.selectedItems"
     >
@@ -65,4 +66,12 @@
   </div>
   <button (click)="addIntoCurrentNote()">Select</button>
   <button (click)="myModal.close()" class="ml-2">Close</button>
+</ngx-smart-modal>
+
+<ngx-smart-modal #typeModal identifier="typeModal">
+  <h1>Add a note type</h1>
+  <p>Add a note type</p>
+  <input class="form-control-lg mb-2" placeholder="type" type="text" #typeInputField><br>
+  <button class="btn btn-default" (click)="addType()">Add type</button>
+  <button (click)="typeModal.close()" class="ml-2 btn btn-default">Close</button>
 </ngx-smart-modal>
