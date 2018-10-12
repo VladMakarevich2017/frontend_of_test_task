@@ -5,6 +5,7 @@ import {NotesSection} from '../_models/notesSection';
 import {NgxSmartModalService} from 'ngx-smart-modal';
 import {TreeviewConfig, TreeviewItem} from 'ngx-treeview';
 import {ITreeOptions} from 'angular-tree-component';
+import {ContextMenuComponent} from 'ngx-contextmenu';
 
 @Component({
   templateUrl: 'home.component.html',
@@ -17,6 +18,7 @@ export class HomeComponent implements AfterContentInit {
 
   @ViewChild('nameInputField') nameInputField: ElementRef;
   @ViewChild('typeInputField') typeInputField: ElementRef;
+  @ViewChild('changeTypeInputField') changeTypeInputField: ElementRef;
   notes: Note[] = [];
   editorContent: string;
   selectedNote: Note;
@@ -27,6 +29,12 @@ export class HomeComponent implements AfterContentInit {
   removeFlag = false;
   dropdownSettings = {};
   selectedItems = [];
+
+  public items = [
+    { name: 'John', otherProperty: 'Foo' },
+    { name: 'Joe', otherProperty: 'Bar' }
+  ];
+  @ViewChild(ContextMenuComponent) public basicMenu: ContextMenuComponent;
 
   ngAfterContentInit() {
     this.setMyNotes();
@@ -170,14 +178,53 @@ export class HomeComponent implements AfterContentInit {
 
   addType() {
     this.noteService.addNoteType(this.typeInputField.nativeElement.value).subscribe(response => {
+      this.pushTypeIntoNoteSectionByResponse(response);
+    });
+  }
+
+  pushTypeIntoNoteSectionByResponse(response) {
+    if (response) {
+      this.notesSections.push({notes: [], selectedItems: [], name: response});
+      this.clearTypeInputField();
+    } else {
+      alert(this.typeInputField.nativeElement.value + ' exists');
+    }
+  }
+
+  changeSectionName() {
+    this.noteService.renameType(this.selectedSection.name, this.changeTypeInputField.nativeElement.value).subscribe(response => {
       if (response) {
-        this.notesSections.push({notes: [], selectedItems: [], name: response});
+        this.selectedSection.name = response;
+        this.clearChangeTypeInputField();
       } else {
-        alert(this.typeInputField.nativeElement.value + ' is exists');
-        this.typeInputField.nativeElement.value = '';
-        this.ngxSmartModalService.getModal('typeModal').close();
+        alert(this.changeTypeInputField.nativeElement.value + ' exists');
       }
     });
+  }
+
+  clearTypeInputField() {
+    this.typeInputField.nativeElement.value = '';
+    this.ngxSmartModalService.getModal('typeModal').close();
+  }
+
+  clearChangeTypeInputField() {
+    this.changeTypeInputField.nativeElement.value = '';
+    this.ngxSmartModalService.getModal('changeTypeModal').close();
+  }
+
+  deleteSection(section: NotesSection) {
+    this.noteService.removeSection(section.name).subscribe(response => {
+      if (response && response === true) {
+        this.selectedSection = null;
+        const index = this.notesSections.indexOf(section);
+        this.notesSections.splice(index, 1);
+      }
+    });
+  }
+
+  openSectionModal(section: NotesSection) {
+    this.selectedSection = section;
+    this.ngxSmartModalService.getModal('changeTypeModal').open();
   }
 
 }

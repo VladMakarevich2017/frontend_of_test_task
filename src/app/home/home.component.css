@@ -86,7 +86,7 @@ h3 {
   position: relative;
   color: #FFFFFF;
   text-align: center;
-  -webkit-transition-duration: 0.4s; /* Safari */
+  -webkit-transition-duration: 0.4s;
   transition-duration: 0.4s;
   text-decoration: none;
   overflow: hidden;
@@ -111,6 +111,15 @@ h3 {
   margin: 0;
   opacity: 1;
   transition: 0s
+}
+
+.context-menu-link {
+  font-size: 20px;
+  text-decoration: none;
+}
+
+context-menu {
+  border-radius: 7px;
 }
 
 

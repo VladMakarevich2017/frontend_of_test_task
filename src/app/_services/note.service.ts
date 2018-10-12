@@ -25,6 +25,10 @@ export class NoteService {
       return this.http.post<string>(`${environment.apiUrl}/notes/addtype`, type);
     }
 
+    renameType(oldType: string, newType: string) {
+      return this.http.post<string>(`${environment.apiUrl}/notes/renametype`, {oldType, newType});
+    }
+
     removeNote(note: Note) {
       return this.http.post(`${environment.apiUrl}/notes/delete`, note.id);
     }
@@ -43,6 +47,10 @@ export class NoteService {
 
     removeInsideNote(note: Note, additionalNoteId: number) {
       return this.http.post(`${environment.apiUrl}/notes/delete/inside`, {note, additionalNoteId});
+    }
+
+    removeSection(sectionName: string) {
+      return this.http.post(`${environment.apiUrl}/notes/delete/type`, sectionName);
     }
 
 }

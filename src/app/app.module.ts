@@ -16,6 +16,7 @@ import {NgxSmartModalModule} from 'ngx-smart-modal';
 import {NgMultiSelectDropDownModule} from 'ng-multiselect-dropdown';
 import {TreeviewModule} from 'ngx-treeview';
 import {TreeModule} from 'angular-tree-component';
+import {ContextMenuModule} from 'ngx-contextmenu';
 
 @NgModule({
     imports: [
@@ -31,7 +32,8 @@ import {TreeModule} from 'angular-tree-component';
       NgxSmartModalModule.forRoot(),
       NgMultiSelectDropDownModule.forRoot(),
       TreeviewModule.forRoot(),
-      TreeModule.forRoot()
+      TreeModule.forRoot(),
+      ContextMenuModule.forRoot()
     ],
     declarations: [
         AppComponent,
