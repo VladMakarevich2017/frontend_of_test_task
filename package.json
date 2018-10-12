@@ -22,6 +22,7 @@
     "@angular/platform-browser-dynamic": "^6.1.0",
     "@angular/router": "^6.1.0",
     "@qontu/ngx-inline-editor": "^0.2.0-alpha.12",
+    "@syncfusion/ej2-ng-navigations": "^16.2.50",
     "angular-bootstrap-md": "^6.2.5",
     "angular-font-awesome": "^3.1.2",
     "angular-froala-wysiwyg": "^2.8.5",

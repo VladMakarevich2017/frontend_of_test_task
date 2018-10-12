@@ -53,4 +53,8 @@ export class NoteService {
       return this.http.post(`${environment.apiUrl}/notes/delete/type`, sectionName);
     }
 
+    checkType(type: string) {
+      return this.http.post(`${environment.apiUrl}/notes/checktype`, type);
+    }
+
 }

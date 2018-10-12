@@ -122,4 +122,16 @@ context-menu {
   border-radius: 7px;
 }
 
+.exists-error {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 5px;
+  border-radius: 7px;
+  width: 60%;
+  color: white;
+  text-align: center;
+  font-size: 20px;
+  background: rgb(191, 69, 62);
+}
+
 

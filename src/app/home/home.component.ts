@@ -11,7 +11,7 @@ import {ContextMenuComponent} from 'ngx-contextmenu';
   templateUrl: 'home.component.html',
   styleUrls: ['home.component.css'],
 })
-export class HomeComponent implements AfterContentInit {
+export class HomeComponent implements OnInit {
 
   constructor(private noteService: NoteService,
               public ngxSmartModalService: NgxSmartModalService) {}
@@ -19,6 +19,7 @@ export class HomeComponent implements AfterContentInit {
   @ViewChild('nameInputField') nameInputField: ElementRef;
   @ViewChild('typeInputField') typeInputField: ElementRef;
   @ViewChild('changeTypeInputField') changeTypeInputField: ElementRef;
+  @ViewChild(ContextMenuComponent) public basicMenu: ContextMenuComponent;
   notes: Note[] = [];
   editorContent: string;
   selectedNote: Note;
@@ -29,14 +30,12 @@ export class HomeComponent implements AfterContentInit {
   removeFlag = false;
   dropdownSettings = {};
   selectedItems = [];
+  public treeFields: Object = {};
+  dataSourse;
+  isExists = false;
+  isEmpty = false;
 
-  public items = [
-    { name: 'John', otherProperty: 'Foo' },
-    { name: 'Joe', otherProperty: 'Bar' }
-  ];
-  @ViewChild(ContextMenuComponent) public basicMenu: ContextMenuComponent;
-
-  ngAfterContentInit() {
+  ngOnInit() {
     this.setMyNotes();
     this.dropdownSettings = {
       singleSelection: false,
@@ -53,6 +52,13 @@ export class HomeComponent implements AfterContentInit {
     this.noteService.getTypesOfNotes().subscribe(types => {
       this.typesOfNotes = JSON.parse(JSON.stringify(types));
       this.spliceNotesIntoSections();
+      this.dataSourse = this.notesSections.filter(section => section.notes.length > 0);
+      this.treeFields = {
+        dataSource: this.dataSourse,
+        id: 'treeId',
+        text: 'name',
+        child: 'notes',
+      };
     });
   }
 
@@ -110,9 +116,14 @@ export class HomeComponent implements AfterContentInit {
   }
 
   spliceNotesIntoSections() {
+    let sectionCount = 0;
+    let noteCount = 0;
     this.typesOfNotes.forEach(type => {
       this.notesSections.push({'name' : type, 'notes' : this.notes
-          .filter(note => note.type.toLowerCase() === type.toLowerCase()), selectedItems: null});
+          .filter(note => note.type.toLowerCase() === type.toLowerCase()), selectedItems: null, treeId: ++sectionCount});
+      if (this.notesSections[this.notesSections.length - 1].notes) {
+        this.notesSections[this.notesSections.length - 1].notes.forEach(note => note.treeId = sectionCount * 10 + ++noteCount);
+      }
     });
   }
 
@@ -184,7 +195,7 @@ export class HomeComponent implements AfterContentInit {
 
   pushTypeIntoNoteSectionByResponse(response) {
     if (response) {
-      this.notesSections.push({notes: [], selectedItems: [], name: response});
+      this.notesSections.push({notes: [], selectedItems: [], name: response, treeId: this.notesSections[this.notesSections.length - 1].treeId + 1});
       this.clearTypeInputField();
     } else {
       alert(this.typeInputField.nativeElement.value + ' exists');
@@ -220,6 +231,21 @@ export class HomeComponent implements AfterContentInit {
         this.notesSections.splice(index, 1);
       }
     });
+  }
+
+  nodeChecked(s) {
+  }
+
+  onSearchChange(searchValue: string) {
+    if (searchValue && searchValue.length > 0) {
+      this.noteService.checkType(searchValue).subscribe(response => {
+        this.isExists = response === true;
+      });
+      this.isEmpty = false;
+    } else {
+      this.isExists = false;
+      this.isEmpty = true;
+    }
   }
 
   openSectionModal(section: NotesSection) {

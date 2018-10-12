@@ -56,7 +56,7 @@
 <ngx-smart-modal #myModal identifier="myModal">
   <h1>Notes</h1>
   <p>Select notes</p>
-  <div *ngFor="let noteSection of notesSections" class="mb-2">
+  <!-- <div *ngFor="let noteSection of notesSections" class="mb-2">
     <ng-multiselect-dropdown
       [placeholder]="noteSection.name"
       [data]="getNotesFromNoteSection(noteSection)"
@@ -64,7 +64,15 @@
       [(ngModel)]="noteSection.selectedItems"
     >
     </ng-multiselect-dropdown>
-  </div>
+  </div> -->
+  <!-- <app-treeview [treeFields]="treeFields"></app-treeview> -->
+  <ejs-treeview id="myTree"
+              [fields]="treeFields"
+              [showCheckBox]="true"
+              [allowMultiSelection]="true"
+              (nodeChecked)="nodeChecked($event)"
+  >
+  </ejs-treeview>
   <button (click)="addIntoCurrentNote()">Select</button>
   <button (click)="myModal.close()" class="ml-2">Close</button>
 </ngx-smart-modal>
@@ -72,16 +80,18 @@
 <ngx-smart-modal #typeModal identifier="typeModal">
   <h1>Add a note type</h1>
   <p>Add a note type</p>
-  <input class="form-control-lg mb-2" placeholder="type" type="text" #typeInputField><br>
-  <button class="btn btn-default" (click)="addType()">Add type</button>
+  <input class="form-control-lg mb-2" placeholder="type" type="text" #typeInputField (input)="onSearchChange($event.target.value)"><br>
+  <div *ngIf="isExists" class="exists-error">Type exists</div>
+  <button [disabled]="isExists || isEmpty" class="btn btn-default" (click)="addType()">Add type</button>
   <button (click)="typeModal.close()" class="ml-2 btn btn-default">Close</button>
 </ngx-smart-modal>
 
 <ngx-smart-modal #changeTypeModal identifier="changeTypeModal">
   <h1>Rename the type</h1>
   <p>Rename the type</p>
-  <input *ngIf="selectedSection" class="form-control-lg mb-2" value="{{selectedSection.name}}" type="text" #changeTypeInputField><br>
-  <button class="btn btn-default" (click)="changeSectionName()">Rename</button>
+  <input *ngIf="selectedSection" class="form-control-lg mb-2" value="{{selectedSection.name}}" type="text" #changeTypeInputField (input)="onSearchChange($event.target.value)"><br>
+  <div *ngIf="isExists" class="exists-error">Type exists</div>
+  <button [disabled]="isExists || isEmpty" class="btn btn-default" (click)="changeSectionName()">Rename</button>
   <button (click)="changeTypeModal.close()" class="ml-2 btn btn-default">Close</button>
 </ngx-smart-modal>
 
@@ -94,3 +104,13 @@
     <span class="ml-2 context-menu-link text-secondary">Remove</span>
   </ng-template>
 </context-menu>
+
+<!-- <ejs-treeview id="myTree"
+              [fields]="treeFields"
+              [showCheckBox]="true"
+              [allowMultiSelection]="true"
+              (nodeChecked)="nodeChecked($event)"
+>
+</ejs-treeview> -->
+
+

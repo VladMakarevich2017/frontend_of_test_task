@@ -17,6 +17,8 @@ import {NgMultiSelectDropDownModule} from 'ng-multiselect-dropdown';
 import {TreeviewModule} from 'ngx-treeview';
 import {TreeModule} from 'angular-tree-component';
 import {ContextMenuModule} from 'ngx-contextmenu';
+import {TreeViewComponent} from '@syncfusion/ej2-ng-navigations';
+import { TreeviewComponent } from './treeview/treeview.component';
 
 @NgModule({
     imports: [
@@ -33,15 +35,16 @@ import {ContextMenuModule} from 'ngx-contextmenu';
       NgMultiSelectDropDownModule.forRoot(),
       TreeviewModule.forRoot(),
       TreeModule.forRoot(),
-      ContextMenuModule.forRoot()
+      ContextMenuModule.forRoot(),
     ],
     declarations: [
         AppComponent,
         HomeComponent,
         LoginComponent,
         RegistrationComponent,
-        SafeHtmlPipe
-    ],
+        SafeHtmlPipe,
+        TreeViewComponent,
+        TreeviewComponent],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
