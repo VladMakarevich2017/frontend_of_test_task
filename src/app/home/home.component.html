@@ -65,14 +65,6 @@
     >
     </ng-multiselect-dropdown>
   </div> -->
-  <!-- <app-treeview [treeFields]="treeFields"></app-treeview> -->
-  <ejs-treeview id="myTree"
-              [fields]="treeFields"
-              [showCheckBox]="true"
-              [allowMultiSelection]="true"
-              (nodeChecked)="nodeChecked($event)"
-  >
-  </ejs-treeview>
   <button (click)="addIntoCurrentNote()">Select</button>
   <button (click)="myModal.close()" class="ml-2">Close</button>
 </ngx-smart-modal>
@@ -105,12 +97,5 @@
   </ng-template>
 </context-menu>
 
-<!-- <ejs-treeview id="myTree"
-              [fields]="treeFields"
-              [showCheckBox]="true"
-              [allowMultiSelection]="true"
-              (nodeChecked)="nodeChecked($event)"
->
-</ejs-treeview> -->
-
+<app-tree [notesSections]="notesSections"></app-tree>
 

@@ -30,8 +30,6 @@ export class HomeComponent implements OnInit {
   removeFlag = false;
   dropdownSettings = {};
   selectedItems = [];
-  public treeFields: Object = {};
-  dataSourse;
   isExists = false;
   isEmpty = false;
 
@@ -52,13 +50,6 @@ export class HomeComponent implements OnInit {
     this.noteService.getTypesOfNotes().subscribe(types => {
       this.typesOfNotes = JSON.parse(JSON.stringify(types));
       this.spliceNotesIntoSections();
-      this.dataSourse = this.notesSections.filter(section => section.notes.length > 0);
-      this.treeFields = {
-        dataSource: this.dataSourse,
-        id: 'treeId',
-        text: 'name',
-        child: 'notes',
-      };
     });
   }
 
@@ -231,9 +222,6 @@ export class HomeComponent implements OnInit {
         this.notesSections.splice(index, 1);
       }
     });
-  }
-
-  nodeChecked(s) {
   }
 
   onSearchChange(searchValue: string) {
